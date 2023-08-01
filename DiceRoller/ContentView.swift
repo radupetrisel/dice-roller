@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var roll = Int.random(in: 1...6)
-    @State private var previousRolls = [Int]()
+    @StateObject private var viewModel = ViewModel()
     
     var body: some View {
         NavigationView {
@@ -18,13 +17,13 @@ struct ContentView: View {
                     .font(.title2)
                     .foregroundStyle(.secondary)
                 
-                Text("\(roll)")
+                Text("\(viewModel.currentRoll)")
                     .font(.largeTitle)
                     .padding()
+                    .animation(.default, value: viewModel.currentRoll)
                 
                 Button("Roll") {
-                    roll = Int.random(in: 1...6)
-                    previousRolls.append(roll)
+                    viewModel.roll()
                 }
                 .frame(width: 90, height: 50)
                 .background(.blue)
@@ -34,8 +33,8 @@ struct ContentView: View {
                 
                 List {
                     Section("Previous rolls") {
-                        ForEach(previousRolls.indices, id: \.self) { index in
-                            Text("\(previousRolls[index])")
+                        ForEach(viewModel.previousRolls.indices, id: \.self) { index in
+                            Text("\(viewModel.previousRolls[index])")
                         }
                     }
                 }
