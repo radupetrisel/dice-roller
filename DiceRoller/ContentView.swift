@@ -40,20 +40,46 @@ struct ContentView: View {
                     viewModel.roll()
                 }
                 
+                Picker("Select dice type", selection: $viewModel.diceTypeIndex) {
+                    ForEach(viewModel.diceTypes.indices, id: \.self) {
+                        Text(viewModel.diceTypes[$0].rawValue)
+                            .tag($0)
+                    }
+                }
+                .accessibilityAdjustableAction { direction in
+                    if direction == .increment {
+                        viewModel.moveToNextDiceType()
+                    } else if direction == .decrement {
+                        viewModel.moveToPreviousDiceType()
+                    }
+                }
+                .accessibilityValue("\(viewModel.currentDiceType.rawValue)")
+                
                 
                 List {
                     Section("Previous rolls") {
-                        ForEach(viewModel.previousRolls.indices, id: \.self) { index in
-                            Text("\(viewModel.previousRolls[index])")
+                        ForEach(viewModel.previousRolls) { roll in
+                            HStack {
+                                Text("\(roll.value)")
+                                Spacer()
+                                Text(roll.diceType.rawValue)
+                                    .foregroundStyle(.secondary)
+                            }
                         }
                     }
                 }
                 .listStyle(.grouped)
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel("Previous rolls")
-                .accessibilityHint("\(viewModel.previousRolls.map { String($0)}.joined(separator: ", "))")
+                .accessibilityHint(previousRollsAccesibilityHint)
             }
         }
+    }
+    
+    private var previousRollsAccesibilityHint: String {
+        viewModel.previousRolls
+            .map { "\($0.value) on \($0.diceType.rawValue)" }
+            .joined(separator: ", ")
     }
 }
 
