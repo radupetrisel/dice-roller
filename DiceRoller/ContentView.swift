@@ -13,23 +13,33 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Text("Current roll:")
-                    .font(.title2)
-                    .foregroundStyle(.secondary)
-                
-                Text("\(viewModel.currentRoll)")
+                VStack {
+                    Text("Current roll:")
+                        .font(.title2)
+                        .foregroundStyle(.secondary)
+                    
+                    Text("\(viewModel.currentRoll)")
+                        .font(.largeTitle)
+                        .padding()
+                        .animation(.default, value: viewModel.currentRoll)
+                    
+                    Button("Roll") {
+                        viewModel.roll()
+                    }
+                    .frame(width: 90, height: 50)
+                    .background(.blue)
+                    .foregroundColor(.white)
                     .font(.largeTitle)
-                    .padding()
-                    .animation(.default, value: viewModel.currentRoll)
-                
-                Button("Roll") {
+                    .clipShape(Capsule())
+                }
+                .accessibilityElement(children: .ignore)
+                .accessibilityAddTraits(.isButton)
+                .accessibilityLabel("Roll")
+                .accessibilityValue(String(viewModel.currentRoll))
+                .accessibilityAction {
                     viewModel.roll()
                 }
-                .frame(width: 90, height: 50)
-                .background(.blue)
-                .foregroundColor(.white)
-                .font(.largeTitle)
-                .clipShape(Capsule())
+                
                 
                 List {
                     Section("Previous rolls") {
@@ -39,6 +49,9 @@ struct ContentView: View {
                     }
                 }
                 .listStyle(.grouped)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("Previous rolls")
+                .accessibilityHint("\(viewModel.previousRolls.map { String($0)}.joined(separator: ", "))")
             }
         }
     }
