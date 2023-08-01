@@ -8,14 +8,29 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var roll = Int.random(in: 1...6)
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        NavigationView {
+            VStack {
+                Text("Current roll:")
+                    .font(.title2)
+                    .foregroundStyle(.secondary)
+                
+                Text("\(roll)")
+                    .font(.largeTitle)
+                    .padding()
+                
+                Button("Roll") {
+                    roll = Int.random(in: 1...6)
+                }
+                .frame(width: 90, height: 50)
+                .background(.blue)
+                .foregroundColor(.white)
+                .font(.largeTitle)
+                .clipShape(Capsule())
+            }
         }
-        .padding()
     }
 }
 
