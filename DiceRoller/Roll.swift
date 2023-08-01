@@ -9,7 +9,7 @@ import Foundation
 
 struct Roll: Identifiable {
     let id = UUID()
-    let value: Int
+    let values: [Int]
     let diceType: DiceType
 }
 

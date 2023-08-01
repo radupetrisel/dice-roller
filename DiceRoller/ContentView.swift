@@ -18,10 +18,14 @@ struct ContentView: View {
                         .font(.title2)
                         .foregroundStyle(.secondary)
                     
-                    Text("\(viewModel.currentRoll)")
-                        .font(.largeTitle)
-                        .padding()
-                        .animation(.default, value: viewModel.currentRoll)
+                    HStack {
+                        ForEach(viewModel.currentRolls.indices, id: \.self) {
+                            Text(getRollDisplayText(viewModel.currentRolls[$0]))
+                                .font(.largeTitle)
+                                .padding()
+                                .animation(.default, value: viewModel.currentRolls[$0])
+                        }
+                    }
                     
                     Button("Roll") {
                         viewModel.roll()
@@ -35,32 +39,47 @@ struct ContentView: View {
                 .accessibilityElement(children: .ignore)
                 .accessibilityAddTraits(.isButton)
                 .accessibilityLabel("Roll")
-                .accessibilityValue(String(viewModel.currentRoll))
+                .accessibilityValue(getRollsString(viewModel.currentRollsWrapper))
                 .accessibilityAction {
                     viewModel.roll()
                 }
                 
-                Picker("Select dice type", selection: $viewModel.diceTypeIndex) {
-                    ForEach(viewModel.diceTypes.indices, id: \.self) {
-                        Text(viewModel.diceTypes[$0].rawValue)
-                            .tag($0)
+                HStack {
+                    Picker("Select dice type", selection: $viewModel.diceTypeIndex) {
+                        ForEach(viewModel.diceTypes.indices, id: \.self) {
+                            Text(viewModel.diceTypes[$0].rawValue)
+                                .tag($0)
+                        }
                     }
-                }
-                .accessibilityAdjustableAction { direction in
-                    if direction == .increment {
-                        viewModel.moveToNextDiceType()
-                    } else if direction == .decrement {
-                        viewModel.moveToPreviousDiceType()
+                    .accessibilityAdjustableAction { direction in
+                        if direction == .increment {
+                            viewModel.moveToNextDiceType()
+                        } else if direction == .decrement {
+                            viewModel.moveToPreviousDiceType()
+                        }
                     }
+                    .accessibilityValue("\(viewModel.currentDiceType.rawValue)")
+                    
+                    Picker("Select number of dice", selection: $viewModel.numberOfDice) {
+                        ForEach(1..<4, id: \.self) {
+                            Text("\($0) \($0 == 1 ? "die" : "dice")")
+                        }
+                    }
+                    .accessibilityAdjustableAction { direction in
+                        if direction == .increment {
+                            viewModel.incrementNumberOfDice()
+                        } else if direction == .decrement {
+                            viewModel.decrementNumberOfDice()
+                        }
+                    }
+                    .accessibilityValue("\(viewModel.numberOfDice)")
                 }
-                .accessibilityValue("\(viewModel.currentDiceType.rawValue)")
-                
                 
                 List {
                     Section("Previous rolls") {
                         ForEach(viewModel.previousRolls) { roll in
                             HStack {
-                                Text("\(roll.value)")
+                                Text("\(getRollsString(roll.values))")
                                 Spacer()
                                 Text(roll.diceType.rawValue)
                                     .foregroundStyle(.secondary)
@@ -78,8 +97,19 @@ struct ContentView: View {
     
     private var previousRollsAccesibilityHint: String {
         viewModel.previousRolls
-            .map { "\($0.value) on \($0.diceType.rawValue)" }
+            .map { "\(getRollsString($0.values)) on \($0.diceType.rawValue)" }
             .joined(separator: ", ")
+    }
+    
+    private func getRollsString(_ rolls: [Int]) -> String {
+        rolls.map { String($0) }
+            .joined(separator: ", ")
+    }
+    
+    private func getRollDisplayText(_ roll: Int?) -> String {
+        guard let roll = roll else { return "???" }
+        
+        return String(roll)
     }
 }
 

@@ -12,18 +12,37 @@ extension ContentView {
         let diceTypes = DiceType.allCases
         
         @Published private(set) var previousRolls = [Roll]()
-        @Published private(set) var currentRoll = 6
+        @Published private(set) var currentRolls = [Int?](repeating: nil, count: 2)
         
+        @Published var numberOfDice = 2 {
+            willSet {
+                if numberOfDice != newValue {
+                    saveRolls()
+                }
+            }
+            didSet {
+                if numberOfDice != oldValue {
+                    resetRolls()
+                }
+            }
+        }
         @Published var diceTypeIndex = 1
         
         var currentDiceType: DiceType {
             diceTypes[diceTypeIndex]
         }
         
+        var currentRollsWrapper: [Int] {
+            currentRolls.compactMap { $0 }
+        }
+        
         func roll() {
-            let newRoll = Roll(value: currentRoll, diceType: currentDiceType)
-            previousRolls.insert(newRoll, at: 0)
-            currentRoll = Int.random(in: 1...currentDiceType.maxValue)
+            saveRolls()
+            currentRolls.removeAll()
+            
+            for _ in 0..<numberOfDice {
+                currentRolls.append(Int.random(in: 1...currentDiceType.maxValue))
+            }
         }
         
         func moveToNextDiceType() {
@@ -32,6 +51,25 @@ extension ContentView {
         
         func moveToPreviousDiceType() {
             diceTypeIndex = max(diceTypeIndex - 1, 0)
+        }
+        
+        func resetRolls() {
+            currentRolls = [Int?](repeating: nil, count: numberOfDice)
+        }
+        
+        func incrementNumberOfDice() {
+            numberOfDice = min(numberOfDice + 1, 3)
+        }
+        
+        func decrementNumberOfDice() {
+            numberOfDice = max(numberOfDice - 1, 1)
+        }
+        
+        private func saveRolls() {
+            if currentRollsWrapper.count == numberOfDice {
+                let newRoll = Roll(values: currentRollsWrapper, diceType: currentDiceType)
+                previousRolls.insert(newRoll, at: 0)
+            }
         }
     }
 }
