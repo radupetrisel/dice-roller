@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var roll = Int.random(in: 1...6)
+    @State private var previousRolls = [Int]()
     
     var body: some View {
         NavigationView {
@@ -23,12 +24,22 @@ struct ContentView: View {
                 
                 Button("Roll") {
                     roll = Int.random(in: 1...6)
+                    previousRolls.append(roll)
                 }
                 .frame(width: 90, height: 50)
                 .background(.blue)
                 .foregroundColor(.white)
                 .font(.largeTitle)
                 .clipShape(Capsule())
+                
+                List {
+                    Section("Previous rolls") {
+                        ForEach(previousRolls.indices, id: \.self) { index in
+                            Text("\(previousRolls[index])")
+                        }
+                    }
+                }
+                .listStyle(.grouped)
             }
         }
     }
