@@ -28,6 +28,12 @@ extension ContentView {
         }
         @Published var diceTypeIndex = 1
         
+        var rollTotal: Int {
+            currentRollsWrapper.reduce(0) { partialResult, current in
+                partialResult + current
+            }
+        }
+        
         var currentDiceType: DiceType {
             diceTypes[diceTypeIndex]
         }

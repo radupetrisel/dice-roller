@@ -14,7 +14,7 @@ struct ContentView: View {
         NavigationView {
             VStack {
                 VStack {
-                    Text("Current roll:")
+                    Text("Current roll")
                         .font(.title2)
                         .foregroundStyle(.secondary)
                     
@@ -26,6 +26,15 @@ struct ContentView: View {
                                 .animation(.default, value: viewModel.currentRolls[$0])
                         }
                     }
+                    
+                    Text("Total")
+                        .font(.title2)
+                        .foregroundStyle(.secondary)
+                    
+                    Text(String(viewModel.rollTotal))
+                        .font(.largeTitle)
+                        .padding()
+                        .animation(.default, value: viewModel.rollTotal)
                     
                     Button("Roll") {
                         viewModel.roll()
