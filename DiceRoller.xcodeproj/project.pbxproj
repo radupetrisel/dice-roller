@@ -13,7 +13,10 @@
 		7C69EB6D2A792B25009ED902 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C69EB6C2A792B25009ED902 /* Preview Assets.xcassets */; };
 		7C69EB742A792B6B009ED902 /* Readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 7C69EB732A792B6B009ED902 /* Readme.md */; };
 		7C69EB762A792EE8009ED902 /* ContentView-ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C69EB752A792EE8009ED902 /* ContentView-ViewModel.swift */; };
-		7C69EB782A7937D9009ED902 /* Roll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C69EB772A7937D9009ED902 /* Roll.swift */; };
+		7C69EB782A7937D9009ED902 /* DiceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C69EB772A7937D9009ED902 /* DiceType.swift */; };
+		7CFB2DFB2A7A937F0011C57E /* DiceRoller.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7CFB2DF92A7A937F0011C57E /* DiceRoller.xcdatamodeld */; };
+		7CFB2E012A7A96FF0011C57E /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFB2E002A7A96FF0011C57E /* DataController.swift */; };
+		7CFB2E032A7A9A610011C57E /* Roll+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFB2E022A7A9A610011C57E /* Roll+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,7 +27,10 @@
 		7C69EB6C2A792B25009ED902 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		7C69EB732A792B6B009ED902 /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
 		7C69EB752A792EE8009ED902 /* ContentView-ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView-ViewModel.swift"; sourceTree = "<group>"; };
-		7C69EB772A7937D9009ED902 /* Roll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Roll.swift; sourceTree = "<group>"; };
+		7C69EB772A7937D9009ED902 /* DiceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiceType.swift; sourceTree = "<group>"; };
+		7CFB2DFA2A7A937F0011C57E /* DiceRoller.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DiceRoller.xcdatamodel; sourceTree = "<group>"; };
+		7CFB2E002A7A96FF0011C57E /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
+		7CFB2E022A7A9A610011C57E /* Roll+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Roll+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,10 +66,13 @@
 			children = (
 				7C69EB652A792B25009ED902 /* DiceRollerApp.swift */,
 				7C69EB672A792B25009ED902 /* ContentView.swift */,
-				7C69EB772A7937D9009ED902 /* Roll.swift */,
+				7C69EB772A7937D9009ED902 /* DiceType.swift */,
 				7C69EB752A792EE8009ED902 /* ContentView-ViewModel.swift */,
+				7CFB2E002A7A96FF0011C57E /* DataController.swift */,
 				7C69EB692A792B25009ED902 /* Assets.xcassets */,
 				7C69EB6B2A792B25009ED902 /* Preview Content */,
+				7CFB2DF92A7A937F0011C57E /* DiceRoller.xcdatamodeld */,
+				7CFB2E022A7A9A610011C57E /* Roll+Extensions.swift */,
 			);
 			path = DiceRoller;
 			sourceTree = "<group>";
@@ -147,9 +156,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7CFB2DFB2A7A937F0011C57E /* DiceRoller.xcdatamodeld in Sources */,
 				7C69EB682A792B25009ED902 /* ContentView.swift in Sources */,
 				7C69EB762A792EE8009ED902 /* ContentView-ViewModel.swift in Sources */,
-				7C69EB782A7937D9009ED902 /* Roll.swift in Sources */,
+				7CFB2E012A7A96FF0011C57E /* DataController.swift in Sources */,
+				7CFB2E032A7A9A610011C57E /* Roll+Extensions.swift in Sources */,
+				7C69EB782A7937D9009ED902 /* DiceType.swift in Sources */,
 				7C69EB662A792B25009ED902 /* DiceRollerApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -351,6 +363,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		7CFB2DF92A7A937F0011C57E /* DiceRoller.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				7CFB2DFA2A7A937F0011C57E /* DiceRoller.xcdatamodel */,
+			);
+			currentVersion = 7CFB2DFA2A7A937F0011C57E /* DiceRoller.xcdatamodel */;
+			path = DiceRoller.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 7C69EB5A2A792B25009ED902 /* Project object */;
 }

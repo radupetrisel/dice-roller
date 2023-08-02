@@ -9,9 +9,12 @@ import Foundation
 
 extension ContentView {
     @MainActor final class ViewModel: ObservableObject {
+        private let dataController = DataController()
+        private let jsonEncoder = JSONEncoder()
+        
         let diceTypes = DiceType.allCases
         
-        @Published private(set) var previousRolls = [Roll]()
+        @Published private(set) var previousRolls: [Roll]
         @Published private(set) var currentRolls = [Int?](repeating: nil, count: 2)
         
         @Published var numberOfDice = 2 {
@@ -40,6 +43,16 @@ extension ContentView {
         
         var currentRollsWrapper: [Int] {
             currentRolls.compactMap { $0 }
+        }
+        
+        init() {
+            do {
+                let fetchRequest = Roll.fetchRequest()
+                fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Roll.date, ascending: false)]
+                previousRolls = try dataController.viewContext.fetch(fetchRequest)
+            } catch {
+                previousRolls = []
+            }
         }
         
         func roll() {
@@ -73,9 +86,24 @@ extension ContentView {
         
         private func saveRolls() {
             if currentRollsWrapper.count == numberOfDice {
-                let newRoll = Roll(values: currentRollsWrapper, diceType: currentDiceType)
+                let newRoll = makeRoll()
                 previousRolls.insert(newRoll, at: 0)
+                do {
+                    try dataController.viewContext.save()
+                } catch {
+                    print("Error saving rolls: \(error.localizedDescription)")
+                }
             }
+        }
+        
+        private func makeRoll() -> Roll {
+            let roll = Roll(context: dataController.viewContext)
+            roll.id = UUID()
+            roll.diceType = currentDiceType.rawValue
+            roll.values = try? jsonEncoder.encode(currentRollsWrapper)
+            roll.date = Date.now
+            
+            return roll
         }
     }
 }

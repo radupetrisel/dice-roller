@@ -7,12 +7,6 @@
 
 import Foundation
 
-struct Roll: Identifiable {
-    let id = UUID()
-    let values: [Int]
-    let diceType: DiceType
-}
-
 enum DiceType: String, CaseIterable {
     case fourSided = "4-Sided"
     case sixSided = "6-Sided"

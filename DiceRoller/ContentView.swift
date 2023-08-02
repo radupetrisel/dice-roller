@@ -47,8 +47,8 @@ struct ContentView: View {
                 }
                 .accessibilityElement(children: .ignore)
                 .accessibilityAddTraits(.isButton)
-                .accessibilityLabel("Roll")
-                .accessibilityValue(getRollsString(viewModel.currentRollsWrapper))
+                .accessibilityLabel(viewModel.currentRollsWrapper.isEmpty ? "Roll" : "")
+                .accessibilityValue(viewModel.currentRollsWrapper.isEmpty ? "" : currentRollAccesibilityValue)
                 .accessibilityAction {
                     viewModel.roll()
                 }
@@ -88,9 +88,9 @@ struct ContentView: View {
                     Section("Previous rolls") {
                         ForEach(viewModel.previousRolls) { roll in
                             HStack {
-                                Text("\(getRollsString(roll.values))")
+                                Text("\(getRollsString(roll.valuesWrapped))")
                                 Spacer()
-                                Text(roll.diceType.rawValue)
+                                Text(roll.diceTypeWrapped.rawValue)
                                     .foregroundStyle(.secondary)
                             }
                         }
@@ -104,9 +104,13 @@ struct ContentView: View {
         }
     }
     
+    private var currentRollAccesibilityValue: String {
+        "Rolled: \(getRollsString(viewModel.currentRollsWrapper)). Total: \(viewModel.rollTotal)"
+    }
+    
     private var previousRollsAccesibilityHint: String {
         viewModel.previousRolls
-            .map { "\(getRollsString($0.values)) on \($0.diceType.rawValue)" }
+            .map { "\(getRollsString($0.valuesWrapped)) on \($0.diceTypeWrapped.rawValue)" }
             .joined(separator: ", ")
     }
     
