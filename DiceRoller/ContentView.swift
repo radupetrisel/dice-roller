@@ -10,6 +10,8 @@ import SwiftUI
 struct ContentView: View {
     @StateObject private var viewModel = ViewModel()
     
+    @State private var feedbackGenerator = UINotificationFeedbackGenerator()
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -37,6 +39,7 @@ struct ContentView: View {
                         .animation(.default, value: viewModel.rollTotal)
                     
                     Button("Roll") {
+                        feedbackGenerator.notificationOccurred(.success)
                         viewModel.roll()
                     }
                     .frame(width: 90, height: 50)
