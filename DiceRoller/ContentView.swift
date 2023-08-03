@@ -38,15 +38,12 @@ struct ContentView: View {
                         .padding()
                         .animation(.default, value: viewModel.rollTotal)
                     
-                    Button("Roll") {
-                        feedbackGenerator.notificationOccurred(.success)
-                        viewModel.roll()
-                    }
-                    .frame(width: 90, height: 50)
-                    .background(.blue)
-                    .foregroundColor(.white)
-                    .font(.largeTitle)
-                    .clipShape(Capsule())
+                    Button("Roll", action: roll)
+                        .frame(width: 90, height: 50)
+                        .background(.blue)
+                        .foregroundColor(.white)
+                        .font(.largeTitle)
+                        .clipShape(Capsule())
                 }
                 .accessibilityElement(children: .ignore)
                 .accessibilityAddTraits(.isButton)
@@ -126,6 +123,12 @@ struct ContentView: View {
         guard let roll = roll else { return "???" }
         
         return String(roll)
+    }
+    
+    private func roll() {
+        feedbackGenerator.prepare()
+        viewModel.roll()
+        feedbackGenerator.notificationOccurred(.success)
     }
 }
 

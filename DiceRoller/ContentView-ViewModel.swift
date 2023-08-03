@@ -5,12 +5,14 @@
 //  Created by Radu Petrisel on 01.08.2023.
 //
 
+import Combine
 import Foundation
 
 extension ContentView {
     @MainActor final class ViewModel: ObservableObject {
         private let dataController = DataController()
         private let jsonEncoder = JSONEncoder()
+        private let timer = Timer.publish(every: 0.3, on: .main, in: .common)
         
         let diceTypes = DiceType.allCases
         
@@ -57,11 +59,23 @@ extension ContentView {
         
         func roll() {
             saveRolls()
-            currentRolls.removeAll()
             
-            for _ in 0..<numberOfDice {
-                currentRolls.append(Int.random(in: 1...currentDiceType.maxValue))
-            }
+            var cancellables = [AnyCancellable]()
+            timer.connect()
+                .store(in: &cancellables)
+            
+            timer
+                .prefix(5)
+                .sink { _ in
+                    cancellables.forEach { $0.cancel() }
+                    cancellables.removeAll()
+                } receiveValue: { [unowned self] _ in
+                    self.currentRolls.removeAll()
+                    for _ in 0..<self.numberOfDice {
+                        self.currentRolls.append(Int.random(in: 1...self.currentDiceType.maxValue))
+                    }
+                }
+                .store(in: &cancellables)
         }
         
         func moveToNextDiceType() {
